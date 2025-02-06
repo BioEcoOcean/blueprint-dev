@@ -40,8 +40,13 @@ svg {
 
 /* Link styles */
 .link {
-  stroke: #ff0000;
+  stroke: #ccc;
   stroke-width: 1.5px;
+  transition: stroke 0.2s, stroke-width 0.2s; 
+}
+.link:hover {
+  stroke: #002366;  /* Dark blue on hover */
+  stroke-width: 3px;  /* Increase thickness on hover */
 }
 .tooltip {
   position: absolute;
@@ -51,3 +56,18 @@ svg {
   border-radius: 5px;
   pointer-events: none;
 }
+/* Default link label style */
+.link-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  fill: #333;  /* Dark grey text color */
+  pointer-events: none;  /* Prevent interaction with the text */
+  opacity: 0;  /* Initially hide the link text */
+  transition: opacity 0.2s;  /* Smooth fade-in transition */
+}
+
+/* Show the link label when hovering over the link */
+.link:hover + .link-label {
+  opacity: 1;  /* Make text visible on hover */
+}
+
