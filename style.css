@@ -1,6 +1,6 @@
 /* General styles */
 body {
-  background-color: #87CEEB; /* Light blue background */
+  background-color: #c1edff; /* Light blue background */
   font-family: 'Montserrat', sans-serif; /* Use Montserrat font */
   color: #164076;
   margin: 0;
@@ -40,7 +40,7 @@ svg {
 
 /* Link styles */
 .link {
-  stroke: #ccc;
+  stroke: #ff0000;
   stroke-width: 1.5px;
 }
 .tooltip {

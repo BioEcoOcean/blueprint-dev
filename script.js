@@ -60,6 +60,17 @@ const link = svg.selectAll(".link")
   })
   .on("mouseout", () => tooltip.style("opacity", 0));
 
+  // Add link labels 
+  const linkLabels = svg.selectAll(".link-label")
+  .data(data.links)
+  .enter()
+  .append("text")
+  .attr("class", "link-label")
+  .attr("text-anchor", "middle") // Center the text
+  .attr("font-size", "12px") // Adjust font size
+  .attr("fill", "#333") // Text color
+  .text(d => d.info); // Use the custom info for the text
+
 // Add nodes
 const node = svg.selectAll(".node")
   .data(data.nodes)
@@ -91,4 +102,6 @@ simulation.on("tick", () => {
   
   labels.attr("x", d => d.x)
         .attr("y", d => d.y);
+  linkLabels.attr("x", d => (d.source.x + d.target.x) / 2)
+            .attr("y", d => (d.source.y + d.target.y) / 2);
 });
