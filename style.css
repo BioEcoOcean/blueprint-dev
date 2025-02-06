@@ -1,0 +1,44 @@
+/* General styles */
+body {
+  background-color: #87CEEB; /* Light blue background */
+  font-family: 'Montserrat', sans-serif; /* Use Montserrat font */
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: #002366; /* Dark blue for the heading */
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* SVG container styles */
+svg {
+  display: block;
+  margin: 0 auto;
+  background-color: #eaf6ff; /* Optional: subtle background for the SVG */
+  border: 1px solid #002366;
+  border-radius: 10px;
+}
+
+/* Node styles */
+.node {
+  fill: steelblue; /* Default color for nodes */
+  stroke: #002366; /* Dark blue stroke for nodes */
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+/* Text labels for nodes */
+.node-label {
+  font-size: 14px; /* Adjust the font size */
+  fill: #002366; /* Dark blue for text */
+  font-family: 'Montserrat', sans-serif; /* Same font as the rest of the page */
+  pointer-events: none; /* Prevent text from capturing mouse events */
+}
+
+/* Link styles */
+.link {
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
