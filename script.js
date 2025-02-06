@@ -10,7 +10,9 @@ const data = {
     { id: "Application in Society", info: "Text", url: "pages/application-in-society.html" },
     { id: "Communication & Outreach", info: "Text", url: "pages/communication-outreach.html"  },
   ],
-  links: [],
+  links: [
+    {source: "Planning", target: "Data Collection", info: "Do you have a plan for how data will be managed?"}
+  ],
 };
 
 // Create links to connect all nodes to each other
@@ -21,7 +23,8 @@ data.nodes.forEach((node, i) => {
 });
 
 // Create the SVG canvas
-const width = 800, height = 800;
+const width = window.innerWidth * 0.8; 
+const height = window.innerHeight * 0.8; 
 const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
 
 const tooltip = d3.select("#tooltip");
