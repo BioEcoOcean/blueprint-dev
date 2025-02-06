@@ -1,14 +1,14 @@
 const data = {
   nodes: [
-    { id: "Evaluation" },
-    { id: "Review to Learn" },
-    { id: "Planning" },
-    { id: "Data Collection" },
-    { id: "Data Management" },
-    { id: "Analysis & Modelling" },
-    { id: "Data Products" },
-    { id: "Application in Society" },
-    { id: "Communication & Outreach" },
+    { id: "Evaluation", info: "Text", url: "evaluation.html"  },
+    { id: "Review to Learn", info: "Text", url: "review-to-learn.html"   },
+    { id: "Planning", info: "Text", url: "planning.html"  },
+    { id: "Data Collection", info: "Text", url: "data-collection.html"  },
+    { id: "Data Management", info: "Text", url: "data-management.html"  },
+    { id: "Analysis & Modelling", info: "Text", url: "analysis-modelling.html"  },
+    { id: "Data Products", info: "Text", url: "data-products.html"  },
+    { id: "Application in Society", info: "Text", url: "application-in-society.html" },
+    { id: "Communication & Outreach", info: "Text", url: "communication-outreach.html"  },
   ],
   links: [],
 };
@@ -62,7 +62,7 @@ const node = svg.selectAll(".node")
   })
   .on("mouseout", () => tooltip.style("opacity", 0))
   .on("click", (event, d) => {
-    alert(`You clicked on ${d.id}`);
+    window.location.href = d.url; // Redirect to the node's page
     // Optionally redirect or perform other actions
   });
 
