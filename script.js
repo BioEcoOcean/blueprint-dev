@@ -1,14 +1,14 @@
 const data = {
   nodes: [
-    { id: "Evaluation", info: "Text", url: "evaluation.html"  },
-    { id: "Review to Learn", info: "Text", url: "review-to-learn.html"   },
-    { id: "Planning", info: "Text", url: "planning.html"  },
-    { id: "Data Collection", info: "Text", url: "data-collection.html"  },
-    { id: "Data Management", info: "Text", url: "data-management.html"  },
-    { id: "Analysis & Modelling", info: "Text", url: "analysis-modelling.html"  },
-    { id: "Data Products", info: "Text", url: "data-products.html"  },
-    { id: "Application in Society", info: "Text", url: "application-in-society.html" },
-    { id: "Communication & Outreach", info: "Text", url: "communication-outreach.html"  },
+    { id: "Evaluation", info: "Text", url: "pages/evaluation.html"  },
+    { id: "Review to Learn", info: "Text", url: "pages/review-to-learn.html"   },
+    { id: "Planning", info: "Text", url: "pages/planning.html"  },
+    { id: "Data Collection", info: "Text", url: "pages/data-collection.html"  },
+    { id: "Data Management", info: "Text", url: "pages/data-management.html"  },
+    { id: "Analysis & Modelling", info: "Text", url: "pages/analysis-modelling.html"  },
+    { id: "Data Products", info: "Text", url: "pages/data-products.html"  },
+    { id: "Application in Society", info: "Text", url: "pages/application-in-society.html" },
+    { id: "Communication & Outreach", info: "Text", url: "pages/communication-outreach.html"  },
   ],
   links: [],
 };
@@ -33,6 +33,16 @@ const simulation = d3.forceSimulation(data.nodes)
   .force("center", d3.forceCenter(width / 2, height / 2))
   .force("radial", d3.forceRadial(300, width / 2, height / 2));
 
+  // Add labels
+  const labels = svg.selectAll(".node-label")
+  .data(data.nodes)
+  .enter()
+  .append("text")
+  .attr("class", "node-label")
+  .attr("text-anchor", "middle") // Center the text horizontally
+  .attr("dy", "-1.5em") // Position the text above the nodes
+  .text(d => d.id);
+  
 // Add links
 const link = svg.selectAll(".link")
   .data(data.links)
@@ -75,4 +85,7 @@ simulation.on("tick", () => {
 
   node.attr("cx", d => d.x)
       .attr("cy", d => d.y);
+  
+  labels.attr("x", d => d.x)
+        .attr("y", d => d.y);
 });

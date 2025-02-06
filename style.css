@@ -42,3 +42,11 @@ svg {
   stroke: #ccc;
   stroke-width: 1.5px;
 }
+.tooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  pointer-events: none;
+}
