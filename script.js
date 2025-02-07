@@ -70,7 +70,7 @@ const centerX = 400, centerY = 300; // Center position of the circle
 
 // Assign fixed positions for nodes
 data.nodes.forEach((node, i) => {
-  const angle = (i / data.nodes.length) * 2 * Math.PI;
+  const angle = (i / data.nodes.length) * 2 * Math.PI - Math.PI / 2; // Start at top
   node.x = centerX + radius * Math.cos(angle);
   node.y = centerY + radius * Math.sin(angle);
 });
