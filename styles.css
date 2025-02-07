@@ -5,6 +5,8 @@ body {
   color: #164076;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: row;
 }
 
 h1 {

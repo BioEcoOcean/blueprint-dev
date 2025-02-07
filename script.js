@@ -26,14 +26,42 @@ const data = {
     { id: "Communication & Outreach"}, //info: "Text", url: "pages/communication-outreach.html"  },
   ],
   links: [
-    { source: "Evaluation", target: "Review to Learn", info: "Evaluation informs learning." },
-    { source: "Evaluation", target: "Planning", info: "Evaluation aids planning." },
-    // Add remaining links for full connectivity
-    { source: "Evaluation", target: "Data Collection", info: "Evaluation supports data collection." },
-    { source: "Review to Learn", target: "Planning", info: "Learning improves planning." },
-    { source: "Planning", target: "Data Collection", info: "Planning guides data collection." },
-    // Add links between all remaining nodes...
-    {source: "Planning", target: "Data Collection", info: "Do you have a plan for how data will be managed?"},
+    { source: "Evaluation", target: "Review to Learn" },
+    { source: "Evaluation", target: "Planning" },
+    { source: "Evaluation", target: "Data Collection" },
+    { source: "Evaluation", target: "Data Management" },
+    { source: "Evaluation", target: "Analysis & Modelling" },
+    { source: "Evaluation", target: "Data Products" },
+    { source: "Evaluation", target: "Application in Society" },
+    { source: "Evaluation", target: "Communication & Outreach" },
+    { source: "Review to Learn", target: "Planning" },
+    { source: "Review to Learn", target: "Data Collection" },
+    { source: "Review to Learn", target: "Data Management" },
+    { source: "Review to Learn", target: "Analysis & Modelling" },
+    { source: "Review to Learn", target: "Data Products" },
+    { source: "Review to Learn", target: "Application in Society" },
+    { source: "Review to Learn", target: "Communication & Outreach" },
+    { source: "Planning", target: "Data Collection" },
+    { source: "Planning", target: "Data Management" },
+    { source: "Planning", target: "Analysis & Modelling" },
+    { source: "Planning", target: "Data Products" },
+    { source: "Planning", target: "Application in Society" },
+    { source: "Planning", target: "Communication & Outreach" },
+    { source: "Data Collection", target: "Data Management" },
+    { source: "Data Collection", target: "Analysis & Modelling" },
+    { source: "Data Collection", target: "Data Products" },
+    { source: "Data Collection", target: "Application in Society" },
+    { source: "Data Collection", target: "Communication & Outreach" },
+    { source: "Data Management", target: "Analysis & Modelling" },
+    { source: "Data Management", target: "Data Products" },
+    { source: "Data Management", target: "Application in Society" },
+    { source: "Data Management", target: "Communication & Outreach" },
+    { source: "Analysis & Modelling", target: "Data Products" },
+    { source: "Analysis & Modelling", target: "Application in Society" },
+    { source: "Analysis & Modelling", target: "Communication & Outreach" },
+    { source: "Data Products", target: "Application in Society" },
+    { source: "Data Products", target: "Communication & Outreach" },
+    { source: "Application in Society", target: "Communication & Outreach" },
   ],
 };
 
@@ -60,10 +88,22 @@ const link = svg.selectAll(".link")
   .enter()
   .append("line")
   .attr("class", "link")
-  .attr("x1", d => d.source.x)
-  .attr("y1", d => d.source.y)
-  .attr("x2", d => d.target.x)
-  .attr("y2", d => d.target.y)
+  .attr("x1", d => {
+    const sourceNode = data.nodes.find(node => node.id === d.source);
+    return sourceNode.x;
+  })
+  .attr("y1", d => {
+    const sourceNode = data.nodes.find(node => node.id === d.source);
+    return sourceNode.y;
+  })
+  .attr("x2", d => {
+    const targetNode = data.nodes.find(node => node.id === d.target);
+    return targetNode.x;
+  })
+  .attr("y2", d => {
+    const targetNode = data.nodes.find(node => node.id === d.target);
+    return targetNode.y;
+  })
   .on("mouseover", (event, d) => {
     tooltip.style("left", `${event.pageX + 10}px`)
       .style("top", `${event.pageY + 10}px`)
@@ -112,3 +152,6 @@ const questions = [
   { text: "Have you evaluated your data collection methods?", tags: ["Evaluation", "Data Collection"] },
   // Add more questions...
 ];
+
+console.log(data.nodes);
+console.log(data.links);
