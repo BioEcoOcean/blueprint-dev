@@ -12,7 +12,33 @@ h1 {
   text-align: center;
   margin-top: 20px;
 }
+#spiderweb {
+  flex: 2;
+  background: #e6f7ff; /* Light blue background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
+#info-panel {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  border-left: 2px solid #ccc;
+  overflow-y: auto;
+}
+
+
+#tooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  pointer-events: none;
+  display: none;
+}
 /* SVG container styles */
 svg {
   display: block;
@@ -48,14 +74,12 @@ svg {
   stroke: #002366;  /* Dark blue on hover */
   stroke-width: 3px;  /* Increase thickness on hover */
 }
-.tooltip {
-  position: absolute;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 5px;
-  border-radius: 5px;
-  pointer-events: none;
+
+.link.selected {
+  stroke: #ff9900;
+  stroke-width: 3px;
 }
+
 /* Default link label style */
 .link-label {
   font-family: 'Montserrat', sans-serif;
