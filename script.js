@@ -137,23 +137,38 @@ const node = svg.selectAll(".node")
 
 // Handle showing the info panel
 function showInfoPanel(content) {
-  const infoPanel = document.getElementById("info-panel");
-  const infoContent = document.getElementById("info-content");
-  infoContent.innerHTML = content; // Update the content of the info panel
-  infoPanel.style.display = "block"; // Show the info panel
+  // Remove any existing info panel
+  svg.selectAll(".info-panel").remove();
 
-  // Shrink the spiderweb container
-  document.getElementById("spiderweb").style.flex = "1";
+  // Add a new info panel as an SVG foreignObject
+  svg.append("foreignObject")
+    .attr("class", "info-panel")
+    .attr("x", 450) // Position to the right of the spiderweb
+    .attr("y", 50)
+    .attr("width", 300)
+    .attr("height", 400)
+    .html(`
+      <div xmlns="http://www.w3.org/1999/xhtml" style="border: 1px solid #ccc; padding: 10px; background: white; border-radius: 5px;">
+        ${content}
+        <button id="close-info-panel" style="margin-top: 10px;">Close</button>
+      </div>
+    `);
+
+  // Add the close button behavior
+  document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
 }
+
 
 // Handle hiding the info panel
 function hideInfoPanel() {
-  const infoPanel = document.getElementById("info-panel");
-  infoPanel.style.display = "none"; // Hide the info panel
+  // Remove the info panel
+  svg.selectAll(".info-panel").remove();
 
-  // Expand the spiderweb container
-  document.getElementById("spiderweb").style.flex = "2";
+  // Reset the spiderweb scale
+  svg.transition().duration(1000)
+    .attr("transform", "scale(1) translate(0, 0)");
 }
+
 
 // Add event listener to close button
 document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
