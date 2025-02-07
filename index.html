@@ -10,16 +10,22 @@
   <img src="images/bioecoocean_logo.png" alt="BioEcoOcean Logo" height="100px">
 </head>
 <body>
+  <img src="images/bioecoocean_logo.png" alt="BioEcoOcean Logo" height="100px">
   <h1>BioEcoOcean Blueprint for Integrated Science</h1>
   <p>Each component in the ocean observing value chain is interlinked and important. Explore the Blueprint below to get you thinking about the way ocean observing programs work!</p>
-  <div id="spiderweb"></div>
-  <div id="info-panel">
-    <h1>Details</h1>
-    <p>Select a node or link to see relevant information.</p>
-  </div>
-  <div id="tooltip"></div>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
   
+  <!-- Container for the spiderweb and info panel -->
+  <div id="spiderweb-container">
+    <div id="spiderweb"></div>
+    <div id="info-panel">
+      <button id="close-info-panel">Close</button>
+      <div id="info-content"></div>
+    </div>
+  </div>
+  
+  <div id="tooltip"></div>
+  
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

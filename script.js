@@ -128,11 +128,35 @@ const node = svg.selectAll(".node")
     // Shrink spiderweb and show info
     svg.transition().duration(1000)
       .attr("transform", "scale(0.5) translate(-200, 0)");
+      showInfoPanel(`<h2>${d.id}</h2><p>Details about ${d.id}...</p>`);
 
     const associatedQuestions = questions.filter(q => q.tags.includes(d.id))
       .map(q => `<p>${q.text}</p>`).join("");
     d3.select("#info-panel").html(`<h1>${d.id}</h1>${associatedQuestions}`);
   });
+
+// Handle showing the info panel
+function showInfoPanel(content) {
+  const infoPanel = document.getElementById("info-panel");
+  const infoContent = document.getElementById("info-content");
+  infoContent.innerHTML = content; // Update the content of the info panel
+  infoPanel.style.display = "block"; // Show the info panel
+
+  // Shrink the spiderweb container
+  document.getElementById("spiderweb").style.flex = "1";
+}
+
+// Handle hiding the info panel
+function hideInfoPanel() {
+  const infoPanel = document.getElementById("info-panel");
+  infoPanel.style.display = "none"; // Hide the info panel
+
+  // Expand the spiderweb container
+  document.getElementById("spiderweb").style.flex = "2";
+}
+
+// Add event listener to close button
+document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
 
   // Add labels
 svg.selectAll(".node-label")
