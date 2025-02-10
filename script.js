@@ -1,18 +1,3 @@
-//const http = require('http');
-
-//const hostname = '127.0.0.1'
-//const port = 3000
-// const server = http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   res.setHeader('Content-Type', 'text/plain');
-//   res.end('Hello World\n');
-// });
-
-// server .listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
-// });
-
-
 const data = {
   nodes: [
     { id: "Evaluation"}, //info: "Text", url: "pages/evaluation.html"  },
@@ -65,8 +50,25 @@ const data = {
   ],
 };
 
+// Dummy questions with tags
+const questions = [
+  { text: "Have you thought about a data management plan?", tags: ["Planning", "Data Management"] },
+  { text: "Do you have a strategy for outreach?", tags: ["Communication & Outreach"] },
+  { text: "Have you evaluated your data collection methods?", tags: ["Evaluation", "Data Collection"] },
+  { text: "Have you considered the societal impact of your work?", tags: ["Application in Society"] },
+  { text: "Do you know if your data will be usable for analysis and modeling?", tags: ["Data Collection", "Analysis & Modelling"] },
+  { text: "Have you considered the data products you will create?", tags: ["Data Products"] },
+  { text: "What work has already been done in this field? Who is actively doing work in this (geographic) area?", tags: ["Review to Learn", "Planning"] },
+  { text: "What data do you need to collect to answer your research question?", tags: ["Planning", "Data Collection"] },
+  { text: "What data do you have access to?", tags: ["Data Collection"] },
+  { text: "Did your data collection methods work as expected?", tags: ["Data Collection", "Evaluation"] },
+];
+
+const svgWidth = 800; // Set the width of the SVG box
+const svgHeight = 600; // Set the height of the SVG box
 const radius = 200; // Circle radius
-const centerX = 400, centerY = 300; // Center position of the circle
+const centerX = svgWidth / 2;
+const centerY = svgHeight / 2;
 
 // Assign fixed positions for nodes
 data.nodes.forEach((node, i) => {
@@ -77,12 +79,27 @@ data.nodes.forEach((node, i) => {
 
 // Create the SVG canvas
 const svg = d3.select("#spiderweb").append("svg")
-  .attr("width", "100%")
-  .attr("height", "100%");
+  .attr("width", svgWidth)
+  .attr("height", svgHeight);
 
-  // Tooltip
+// Tooltip
 const tooltip = d3.select("#tooltip");
 
+// Selection mode toggle
+let multiSelectMode = false;
+document.getElementById("toggle-selection-mode").addEventListener("change", (event) => {
+  multiSelectMode = event.target.checked;
+  document.getElementById("toggle-label").textContent = multiSelectMode ? "Multi-Select" : "Single Select";
+});
+
+// Deselect all button
+document.getElementById("deselect-all").addEventListener("click", () => {
+  d3.selectAll(".node").classed("selected", false);
+  d3.selectAll(".link").classed("selected", false);
+  hideInfoPanel();
+});
+
+// Add links
 const link = svg.selectAll(".link")
   .data(data.links)
   .enter()
@@ -104,11 +121,49 @@ const link = svg.selectAll(".link")
     const targetNode = data.nodes.find(node => node.id === d.target);
     return targetNode.y;
   })
+  .on("click", (event, d) => {
+      // Add selected class to the clicked link
+      svg.transition().duration(900)
+      .attr("transform", "translate(-400, 0) scale(1)");
+
+      const sourceNode = data.nodes.find(node => node.id === d.source);
+  const targetNode = data.nodes.find(node => node.id === d.target);
+
+  if (multiSelectMode) {
+    // Toggle the selected class on the clicked link
+    const link = d3.select(event.currentTarget);
+    const isLinkSelected = link.classed("selected");
+    link.classed("selected", !isLinkSelected);
+
+    // Re-evaluate node selection based on remaining selected links
+    d3.selectAll(".node").classed("selected", node => {
+      // Check if the node is part of any currently selected links
+      const isConnectedToSelectedLink = d3
+        .selectAll(".link.selected")
+        .data()
+        .some(link => link.source === node.id || link.target === node.id);
+
+      return isConnectedToSelectedLink;
+    });
+  } else {
+    // Single-select mode: clear all and highlight the current link and nodes
+    d3.selectAll(".node").classed("selected", false);
+    d3.selectAll(".link").classed("selected", false);
+
+    d3.selectAll(".node").classed("selected", node => {
+      return node.id === sourceNode.id || node.id === targetNode.id;
+    });
+    d3.select(event.currentTarget).classed("selected", true);
+  }
+
+  // Update the info panel with the current selection
+  updateInfoPanel();
+})
   .on("mouseover", (event, d) => {
     tooltip.style("left", `${event.pageX + 10}px`)
       .style("top", `${event.pageY + 10}px`)
       .style("display", "inline-block")
-      .html(d.info);
+      .html(`Connection: ${d.source} ↔ ${d.target}`) ;
   })
   .on("mouseout", () => {
     tooltip.style("display", "none");
@@ -120,77 +175,96 @@ const node = svg.selectAll(".node")
   .enter()
   .append("circle")
   .attr("class", "node")
-  .attr("r", 8)
+  .attr("r", 10)
   .attr("cx", d => d.x)
   .attr("cy", d => d.y)
   .attr("fill", "#1f78b4")
   .on("click", (event, d) => {
-    // Shrink spiderweb and show info
-    svg.transition().duration(1000)
-      .attr("transform", "scale(0.5) translate(-200, 0)");
-      showInfoPanel(`<h2>${d.id}</h2><p>Details about ${d.id}...</p>`);
+    svg.transition().duration(900)
+    .attr("transform", "translate(-400, 0) scale(1)");
+    const node = d3.select(event.currentTarget);
+    const isSelected = node.classed("selected");
 
-    const associatedQuestions = questions.filter(q => q.tags.includes(d.id))
-      .map(q => `<p>${q.text}</p>`).join("");
-    d3.select("#info-panel").html(`<h1>${d.id}</h1>${associatedQuestions}`);
+    if (multiSelectMode) {
+      // Toggle selected class on the clicked node
+      node.classed("selected", !isSelected);
+    } else {
+      // Deselect all nodes and links, then select the clicked node
+      d3.selectAll(".node").classed("selected", false);
+      d3.selectAll(".link").classed("selected", false);
+      node.classed("selected", true);
+    }
+
+    // Show info panel with questions related to the selected nodes and links
+    updateInfoPanel();
   });
 
-// Handle showing the info panel
+ // Handle showing the info panel
 function showInfoPanel(content) {
-  // Remove any existing info panel
-  svg.selectAll(".info-panel").remove();
-
-  // Add a new info panel as an SVG foreignObject
-  svg.append("foreignObject")
-    .attr("class", "info-panel")
-    .attr("x", 450) // Position to the right of the spiderweb
-    .attr("y", 50)
-    .attr("width", 300)
-    .attr("height", 400)
-    .html(`
-      <div xmlns="http://www.w3.org/1999/xhtml" style="border: 1px solid #ccc; padding: 10px; background: white; border-radius: 5px;">
-        ${content}
-        <button id="close-info-panel" style="margin-top: 10px;">Close</button>
-      </div>
-    `);
-
+  d3.select("#info-panel")
+    .style("display", "block");
+  // Add content to the info panel
+  d3.select("#info-content").html(content);
   // Add the close button behavior
-  document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
+  //document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
 }
-
 
 // Handle hiding the info panel
 function hideInfoPanel() {
-  // Remove the info panel
-  svg.selectAll(".info-panel").remove();
+  // Hide the info panel
+  d3.select("#info-panel")
+    .style("display", "none");
 
   // Reset the spiderweb scale
-  svg.transition().duration(1000)
+  svg.transition().duration(900)
     .attr("transform", "scale(1) translate(0, 0)");
+  
+    // Remove selected class from all nodes and links
+  d3.selectAll(".node").classed("selected", false);
+  d3.selectAll(".link").classed("selected", false);
 }
-
 
 // Add event listener to close button
 document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
 
-  // Add labels
+// Add labels
 svg.selectAll(".node-label")
   .data(data.nodes)
   .enter()
   .append("text")
   .attr("class", "node-label")
-  .attr("x", d => d.x)
-  .attr("y", d => d.y - 10)
-  .attr("text-anchor", "middle")
+  .attr("x", d => d.x + (15 * Math.cos(Math.atan2(d.y - centerY, d.x - centerX)))) // Offset text outward
+  .attr("y", d => d.y + (15 * Math.sin(Math.atan2(d.y - centerY, d.x - centerX)))) // Offset text outward
+  .attr("text-anchor", d => {
+    const angle = Math.atan2(d.y - centerY, d.x - centerX);
+    return Math.cos(angle) > 0 ? "start" : "end"; // Align text based on direction
+  })
+  .attr("alignment-baseline", d => {
+    const angle = Math.atan2(d.y - centerY, d.x - centerX);
+    return Math.sin(angle) > 0 ? "hanging" : "alphabetic"; // Adjust vertical alignment
+  })
   .text(d => d.id);
 
-// Dummy questions with tags
-const questions = [
-  { text: "Have you thought about a data management plan?", tags: ["Planning", "Data Management"] },
-  { text: "Do you have a strategy for outreach?", tags: ["Communication & Outreach"] },
-  { text: "Have you evaluated your data collection methods?", tags: ["Evaluation", "Data Collection"] },
-  // Add more questions...
-];
+  // Update info panel with questions related to selected nodes and links
+function updateInfoPanel() {
+  const selectedNodes = d3.selectAll(".node.selected").data();
+  const selectedLinks = d3.selectAll(".link.selected").data();
+
+  const selectedNodeIds = selectedNodes.map(node => node.id);
+  const selectedLinkNodeIds = selectedLinks.flatMap(link => [link.source, link.target]);
+
+  const allSelectedIds = [...new Set([...selectedNodeIds, ...selectedLinkNodeIds])];
+
+  const associatedQuestions = questions.filter(q => allSelectedIds.some(id => q.tags.includes(id)))
+    .map(q => `<p>${q.text}</p>`).join("");
+
+    const selectedComponents = allSelectedIds.join(", ");
+    if (allSelectedIds.length > 0 || associatedQuestions) {
+      showInfoPanel(`<h2>Blueprint Component(s):</h2><h3>${selectedComponents}</h3><h2>Questions:</h2>${associatedQuestions}`);
+    } else {
+    hideInfoPanel();
+  }
+}
 
 console.log(data.nodes);
 console.log(data.links);

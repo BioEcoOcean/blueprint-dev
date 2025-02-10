@@ -14,33 +14,13 @@ h1 {
 p {
   margin: 0 20px;
 }
-#spiderweb {
-  flex: 2;
-  background: #e6f7ff; /* Light blue background */
+
+#spiderweb-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 550px;
-}
-
-#info-panel {
-  flex: 1;
-  padding: 20px;
-  background: white;
-  border-left: 2px solid #ccc;
-  display: none; /* Initially hidden */
-  overflow-y: auto;
-}
-
-
-#tooltip {
-  position: absolute;
-  background: white;
-  color: white;
-  padding: 5px;
-  border-radius: 3px;
-  font-size: 0.9rem;
-  pointer-events: none;
+  align-items: flex-start;
+  height: 600px;
+  position: relative;
 }
 /* SVG container styles */
 svg {
@@ -50,27 +30,78 @@ svg {
   border: 1px solid #002366;
   border-radius: 10px;
 }
+#spiderweb {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#info-panel {
+  flex: 1;
+  padding: 20px;
+  background: rgb(255, 255, 255);
+  border: 3px solid #002366; 
+  display: none; /* Initially hidden */
+  overflow-y: auto;
+  height: 100%;
+  width: 50%;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+#close-info-panel {
+  display: block;
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #191660; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#close-info-panel:hover {
+  background-color: #ff3333; /* Darker red on hover */
+}
+
+#tooltip {
+  position: absolute;
+  background: white;
+  color: rgb(19, 34, 116);
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
 
 /* Node styles */
 .node {
   fill: steelblue; /* Default color for nodes */
   stroke: #002366; /* Dark blue stroke for nodes */
-  stroke-width: 2px;
+  stroke-width: 1.75px;
   cursor: pointer;
 }
-
+.node.selected {
+  fill: #ff9900; /* Change to a different color when selected */
+  stroke: #a16305;
+  stroke-width: 1.75px;
+}
 /* Text labels for nodes */
 .node-label {
-  font-size: 14px; /* Adjust the font size */
+  font-size: 17px; /* Adjust the font size */
   fill: #002366; /* Dark blue for text */
   font-family: 'Montserrat', sans-serif; /* Same font as the rest of the page */
   pointer-events: none; /* Prevent text from capturing mouse events */
+  font-weight: bold;
 }
 
 /* Link styles */
 .link {
-  stroke: #ccc;
-  stroke-width: 1.5px;
+  stroke: #cccccc;
+  stroke-width: 3px;
   transition: stroke 0.2s, stroke-width 0.2s; 
 }
 .link:hover {
@@ -80,7 +111,7 @@ svg {
 
 .link.selected {
   stroke: #ff9900;
-  stroke-width: 3px;
+  stroke-width: 6px;
 }
 
 /* Default link label style */
@@ -97,4 +128,73 @@ svg {
 .link:hover + .link-label {
   opacity: 1;  /* Make text visible on hover */
 }
+#controls {
+  margin: 20px;
+  text-align: center;
+}
 
+#controls button {
+  margin: 5px;
+  padding: 10px 10px;
+  background-color: #646a6c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#controls button:hover {
+  background-color: #ff3333; /* Darker red on hover */
+}
+
+/* Slider toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 34px;
+  vertical-align: middle;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #191660;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #763eab;
+}
+
+input:checked + .slider:before {
+  transform: translateX(45px);
+}
+
+#toggle-label {
+  margin-left: 10px;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: larger;
+}
