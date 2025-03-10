@@ -1,7 +1,7 @@
 const data = {
   nodes: [
     { id: "Evaluation"}, //info: "Text", url: "pages/evaluation.html"  },
-    { id: "Explore & Review to Learn"}, //info: "Text", url: "pages/review-to-learn.html"   },
+    { id: "Review to Learn", name: "Explore and Review to Learn"}, //info: "Text", url: "pages/review-to-learn.html"   },
     { id: "Planning"}, //info: "Text", url: "pages/planning.html"  },
     { id: "Data Collection"},// info: "Text", url: "pages/data-collection.html"  },
     { id: "Data Management"}, //info: "Text", url: "pages/data-management.html"  },
