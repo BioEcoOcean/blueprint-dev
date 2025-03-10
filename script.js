@@ -243,7 +243,7 @@ svg.selectAll(".node-label")
     const angle = Math.atan2(d.y - centerY, d.x - centerX);
     return Math.sin(angle) > 0 ? "hanging" : "alphabetic"; // Adjust vertical alignment
   })
-  .text(d => d.id);
+  .text(d => d.name || d.id);
 
   // Update info panel with questions related to selected nodes and links
 function updateInfoPanel() {
