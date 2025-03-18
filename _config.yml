@@ -1,0 +1,19 @@
+name: BioEcoOcean Blueprint
+permalink: pretty
+comments: true
+root:
+  en:
+    url: "/"
+  fr:
+    url: "/fr/"
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  auto_ids: false
+gems: 
+  - jemoji
+url: https://obis.org
+exclude:
+  - README.md
+  - LICENSE

@@ -1,0 +1,33 @@
+---
+layout: home
+title: Blueprint for Integrated Science
+---
+
+{% block content %}
+  <h1>BioEcoOcean Blueprint for Integrated Science</h1>
+  <p>Each component in the ocean observing value chain is interlinked and important. Explore the interactive Blueprint below to gain insights into how these components work together!</p>
+  <p>Use the Single or Multi-Select mode to focus on individual components or explore multiple connections at once.</p>
+  <br>
+  <p><i>This tool is currently under development.</i></p>
+  <br>
+  <div id="controls">
+    <label class="switch">
+      <input type="checkbox" id="toggle-selection-mode">
+      <span class="slider"></span>
+    </label>
+    <span id="toggle-label">Single Select</span>
+    <button id="deselect-all">Deselect All</button>
+  </div>
+  <!-- Container for the spiderweb and info panel -->
+  <div id="spiderweb-container">
+    <div id="spiderweb"></div>
+    <div id="info-panel">
+      <div id="info-content"></div>
+      <button id="close-info-panel">Close</button>      
+    </div>
+  </div>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="script.js"></script>
+  <br>
+
+  {% endblock %}
