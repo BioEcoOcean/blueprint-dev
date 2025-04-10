@@ -94,6 +94,7 @@ svg {
   pointer-events: none;
   display: none;
   z-index: 1000;
+  max-width: 210px;
 }
 
 /* Node styles */

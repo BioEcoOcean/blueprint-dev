@@ -1,14 +1,14 @@
 const data = {
   nodes: [
-    { id: "Evaluation", description: "Assess the effectiveness of the current system." }, //info: "Text", url: "pages/evaluation.html"  },
-    { id: "Explore and Review to Learn", name: "Explore and Review to Learn", description: "Explore and review existing knowledge with the goal to learn from it."}, //info: "Text", url: "pages/review-to-learn.html"   },
-    { id: "Planning", description: "Plan all the steps involved." }, //info: "Text", url: "pages/planning.html"  },
-    { id: "Data Collection", description: "Collect data from various sources."},// info: "Text", url: "pages/data-collection.html"  },
-    { id: "Data Management", description: "Organize and manage collected data."}, //info: "Text", url: "pages/data-management.html"  },
-    { id: "Analysis & Modelling", description: "Analyze data and create models."}, //info: "Text", url: "pages/analysis-modelling.html"  },
-    { id: "Data Products", description: "Generate useful data products."}, //info: "Text", url: "pages/data-products.html"  },
-    { id: "Application in Society", description: "Apply findings to benefit society."}, //info: "Text", url: "pages/application-in-society.html" },
-    { id: "Communication & Outreach", description: "Communicate results and engage with stakeholders."}, //info: "Text", url: "pages/communication-outreach.html"  },
+    { id: "Evaluation", description: "Assess the effectiveness of the current system" }, //info: "Text", url: "pages/evaluation.html"  },
+    { id: "Explore and Review to Learn", name: "Explore and Review to Learn", description: "Explore and review existing knowledge with the goal to learn from it"}, //info: "Text", url: "pages/review-to-learn.html"   },
+    { id: "Planning", description: "Plan all the steps involved" }, //info: "Text", url: "pages/planning.html"  },
+    { id: "Data Collection", description: "Collect data from various sources"},// info: "Text", url: "pages/data-collection.html"  },
+    { id: "Data Management", description: "Organize, manage, and publish collected data"}, //info: "Text", url: "pages/data-management.html"  },
+    { id: "Analysis & Modelling", description: "Analyze data and create models"}, //info: "Text", url: "pages/analysis-modelling.html"  },
+    { id: "Data Products", description: "Generate useful data products"}, //info: "Text", url: "pages/data-products.html"  },
+    { id: "Application in Society", description: "How can the findings benefit society"}, //info: "Text", url: "pages/application-in-society.html" },
+    { id: "Communication & Outreach", description: "Communicate results and engage with stakeholders"}, //info: "Text", url: "pages/communication-outreach.html"  },
   ],
   links: [
     { source: "Evaluation", target: "Explore and Review to Learn" },
@@ -52,6 +52,104 @@ const data = {
 
 // Dummy questions with tags
 const questions = [
+  // Explore and Review to Learn
+  { text: "What new techniques are currently being deployed in your study area?", tags: ["Explore and Review to Learn"] },
+  { text: "What are the emergent issues that need to be addressed?", tags: ["Explore and Review to Learn"] },
+  { text: "How can my review process uncover hidden gaps and lead to meaningful improvements?", tags: ["Explore and Review to Learn"] },
+  { text: "Is your review inclusive of other players in the ocean observation? Who else is involved? Who else is doing similar studies?", tags: ["Explore and Review to Learn"] },
+  { text: "What current practices are you using and how can it be improved to ensure a holistic and integrated ocean observation system?", tags: ["Explore and Review to Learn"] },
+  { text: "How can we improve the ocean observation system to be more inclusive and enhance cooperation among the stakeholders?", tags: ["Explore and Review to Learn"] },
+
+  // Planning
+  { text: "Where do I start?", tags: ["Planning"] },
+  { text: "Have you thought about the need for a data manager or data scientist?", tags: ["Planning"] },
+  { text: "Have you thought about the cost for Data Management? Does your funding require you to budget for data management?", tags: ["Planning"] },
+  { text: "Who else has collected this data? How? Why? When?", tags: ["Planning"] },
+  { text: "Do you have the minimum information needed?", tags: ["Planning"] },
+  { text: "What best practices are you going to employ during data collection, analysis, and data management?", tags: ["Planning"] },
+  { text: "What standard vocabularies are relevant to your study?", tags: ["Planning"] },
+  { text: "How will you communicate the results to the intended users of your output?", tags: ["Planning"] },
+  { text: "What objectives are you planning to achieve? Are they SMART?", tags: ["Planning"] },
+  { text: "Which other actors can be involved into your field campaigns?", tags: ["Planning"] },
+  { text: "How will you ensure that your data will be FAIR?", tags: ["Planning"] },
+  { text: "What new technology (equipment) can be used in your study?", tags: ["Planning"] },
+  { text: "What Essential Ocean Variables will you be collecting?", tags: ["Planning"] },
+  { text: "How can we strengthen the connection with other ocean observation components?", tags: ["Planning"] },
+  
+  { text: "Have you communicated with the relevant stakeholders' (needs and expectations)?", tags: ["Planning"] },
+
+  // Data Collection
+  { text: "What do I need to measure? How? When?", tags: ["Data Collection"] },
+  { text: "What standard procedures (Best Practices) are you using?", tags: ["Data Collection"] },
+  { text: "Has anyone created a model for the data you're planning to collect? Are our standard observation programs addressing the same context?", tags: ["Data Collection"] },
+  { text: "Are there colleagues who are collecting similar data in a similar place or time that we can co-ordinate with?", tags: ["Data Collection"] },
+  { text: "Are there additional parameters we can measure to enhance the efficiency of the data collection period?", tags: ["Data Collection"] },
+  { text: "What controlled vocabularies should you use for this study?", tags: ["Data Collection"] },
+  { text: "Did you ask your colleagues if they are interested in adding some sampling on top of yours?", tags: ["Data Collection"] },
+  { text: "Does your data collection technique/variable allow for intercomparison with other studies at a global scale?", tags: ["Data Collection"] },
+  { text: "Are the sensors being used calibrated? When was the last calibration? How often should it be calibrated?", tags: ["Data Collection"] },
+
+  // Data Management
+  { text: "What data management strategy are you going to use?", tags: ["Data Management"] },
+  { text: "What format/data standards will you use for your data?", tags: ["Data Management"] },
+  { text: "Have you thought about long-term data storage?", tags: ["Data Management"] },
+  { text: "Are there any best practices you could use for your data management? Where will you document these procedures?", tags: ["Data Management"] },
+  { text: "Where are you going to publish your data? Will you get a DOI for your raw data?", tags: ["Data Management"] },
+  { text: "How are CARE principles relevant to your data?", tags: ["Data Management"] },
+  { text: "How will you ensure the use of your data is acknowledged?", tags: ["Data Management"] },
+  { text: "How will you ensure your data is reusable?", tags: ["Data Management"] },
+  { text: "Have you thought about the minimum requirements of your metadata?", tags: ["Data Management"] },
+  { text: "What fail safe (backups) will you implement to protect against data loss?", tags: ["Data Management"] },
+  { text: "How often will you review your data management plan?", tags: ["Data Management"] },
+  { text: "Do you think other data in other languages exists? Will your data require to be saved in other data languages?", tags: ["Data Management"] },
+  { text: "Have you thought about controlled vocabularies for all your variables?", tags: ["Data Management"] },
+
+  // Analysis and Modelling
+  { text: "What data do you need to conduct your analysis/modelling?", tags: ["Analysis & Modelling"] },
+  { text: "Have you checked other data repositories that hold the data that you require for analysis/modelling?", tags: ["Analysis & Modelling"] },
+  { text: "How are you going to acknowledge the use of openly accessible data?", tags: ["Analysis & Modelling"] },
+  { text: "What data threshold do you need to reduce uncertainty and enhance accuracy in your model?", tags: ["Analysis & Modelling"] },
+  { text: "Are there any other variables that can be used in your data analysis/models that can enhance the output?", tags: ["Analysis & Modelling"] },
+  { text: "Are your analysis/modeling outputs comparable with others across the globe?", tags: ["Analysis & Modelling"] },
+  { text: "Are there ongoing studies that you can use for field validation of your model?", tags: ["Analysis & Modelling"] },
+  { text: "How will the finding be applied in the society?", tags: ["Analysis & Modelling"] },
+
+  // Data Products
+  { text: "What data products are needed to answer societal problems?", tags: ["Data Products"] },
+  { text: "Who is the intended user for this data product?", tags: ["Data Products"] },
+  { text: "What expectation does the end user have for this data product?", tags: ["Data Products"] },
+  { text: "How accurate is the data product?", tags: ["Data Products"] },
+  { text: "How will you communicate the use of the data product to the society?", tags: ["Data Products"] },
+  { text: "What data inputs are required for your product? Are they available? Who can you contact?", tags: ["Data Products"] },
+  { text: "Is the data product you are providing the society appropriate at the level that they can understand?", tags: ["Data Products"] },
+  { text: "How will you communicate the uncertainty in your data product to the end users?", tags: ["Data Products"] },
+
+  // Application in Society
+  { text: "Am I giving society what it needs?", tags: ["Application in Society"] },
+  { text: "What is the society's need?", tags: ["Application in Society"] },
+  { text: "How can you apply the finding in the society?", tags: ["Application in Society"] },
+  { text: "How can you communicate the needs of the society to the relevant stakeholders?", tags: ["Application in Society"] },
+  { text: "Who are you going to communicate the society’s needs to?", tags: ["Application in Society"] },
+  { text: "How can the society (users) be involved in the ocean observation process?", tags: ["Application in Society"] },
+
+  // Communication and Outreach
+  { text: "Who are you communicating to/with?", tags: ["Communication & Outreach"] },
+  { text: "Is the communication method chosen appropriate for the intended recipient?", tags: ["Communication a&nd Outreach"] },
+  { text: "What do you want the respondent to do with the information communicated?", tags: ["Communication & Outreach"] },
+  { text: "How can you track the efficiency of your chosen communication method?", tags: ["Communication & Outreach"] },
+  { text: "Are there any cultural communication know-hows needed for your communication?", tags: ["Communication & Outreach"] },
+  { text: "Do you need a communication specialist to communicate with the intended audience?", tags: ["Communication & Outreach"] },
+  { text: "What language does the intended recipient use in communication?", tags: ["Communication & Outreach"] },
+
+  // Evaluation
+  { text: "Did we achieve what we set out to do?", tags: ["Evaluation"] },
+  { text: "Am I using the best available frameworks to evaluate ocean observation efforts?", tags: ["Evaluation"] },
+  { text: "How can I better align my evaluation efforts with the needs of other stakeholders?", tags: ["Evaluation"] },
+  { text: "How can I foster stronger collaborations to ensure my evaluation insights lead to action?", tags: ["Evaluation"] },
+  { text: "What key metrics should I be tracking to assess my effectiveness in evaluation?", tags: ["Evaluation"] },
+  { text: "Is your Data Management Plan working?", tags: ["Evaluation"] },
+  { text: "Does my review result in a diverse perspective, or reinforcing existing assumptions?", tags: ["Evaluation"] },
+  
   { text: "Have you thought about a data management plan?", tags: ["Planning", "Data Management"] }, 
   { text: "Do you have a strategy for outreach?", tags: ["Communication & Outreach"] },
   { text: "Have you evaluated your data collection methods?", tags: ["Evaluation", "Data Collection"] },
@@ -340,7 +438,7 @@ const link = svgGroup.selectAll(".link")
       tooltip.style("left", `${event.pageX + 20}px`)
         .style("top", `${event.pageY + 20}px`)
         .style("display", "inline-block")
-        .html(`Connection: ${d.source} ↔ ${d.target}`) ;
+        .html(`Connection: <br>${d.source} ↔ ${d.target}`) ;
     })
     .on("mouseout", () => {
       tooltip.style("display", "none");
@@ -488,7 +586,7 @@ function updateInfoPanel() {
     .join("<br><br>");
 
   const associatedQuestions = questions.filter(q => allSelectedIds.some(id => q.tags.includes(id)))
-    .map(q => `<p>${q.text}</p>`).join("");
+    .map(q => `<li>${q.text}</li>`).join("");
 
     const selectedComponents = allSelectedIds.join(", ");
     if (allSelectedIds.length > 0 || associatedQuestions) {
