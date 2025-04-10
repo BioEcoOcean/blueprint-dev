@@ -1,17 +1,17 @@
 const data = {
   nodes: [
-    { id: "Evaluation"}, //info: "Text", url: "pages/evaluation.html"  },
-    { id: "Review to Learn", name: "Explore and Review to Learn"}, //info: "Text", url: "pages/review-to-learn.html"   },
-    { id: "Planning"}, //info: "Text", url: "pages/planning.html"  },
-    { id: "Data Collection"},// info: "Text", url: "pages/data-collection.html"  },
-    { id: "Data Management"}, //info: "Text", url: "pages/data-management.html"  },
-    { id: "Analysis & Modelling"}, //info: "Text", url: "pages/analysis-modelling.html"  },
-    { id: "Data Products"}, //info: "Text", url: "pages/data-products.html"  },
-    { id: "Application in Society"}, //info: "Text", url: "pages/application-in-society.html" },
-    { id: "Communication & Outreach"}, //info: "Text", url: "pages/communication-outreach.html"  },
+    { id: "Evaluation", description: "Assess the effectiveness of the current system." }, //info: "Text", url: "pages/evaluation.html"  },
+    { id: "Explore and Review to Learn", name: "Explore and Review to Learn", description: "Explore and review existing knowledge with the goal to learn from it."}, //info: "Text", url: "pages/review-to-learn.html"   },
+    { id: "Planning", description: "Plan all the steps involved." }, //info: "Text", url: "pages/planning.html"  },
+    { id: "Data Collection", description: "Collect data from various sources."},// info: "Text", url: "pages/data-collection.html"  },
+    { id: "Data Management", description: "Organize and manage collected data."}, //info: "Text", url: "pages/data-management.html"  },
+    { id: "Analysis & Modelling", description: "Analyze data and create models."}, //info: "Text", url: "pages/analysis-modelling.html"  },
+    { id: "Data Products", description: "Generate useful data products."}, //info: "Text", url: "pages/data-products.html"  },
+    { id: "Application in Society", description: "Apply findings to benefit society."}, //info: "Text", url: "pages/application-in-society.html" },
+    { id: "Communication & Outreach", description: "Communicate results and engage with stakeholders."}, //info: "Text", url: "pages/communication-outreach.html"  },
   ],
   links: [
-    { source: "Evaluation", target: "Review to Learn" },
+    { source: "Evaluation", target: "Explore and Review to Learn" },
     { source: "Evaluation", target: "Planning" },
     { source: "Evaluation", target: "Data Collection" },
     { source: "Evaluation", target: "Data Management" },
@@ -19,13 +19,13 @@ const data = {
     { source: "Evaluation", target: "Data Products" },
     { source: "Evaluation", target: "Application in Society" },
     { source: "Evaluation", target: "Communication & Outreach" },
-    { source: "Review to Learn", target: "Planning" },
-    { source: "Review to Learn", target: "Data Collection" },
-    { source: "Review to Learn", target: "Data Management" },
-    { source: "Review to Learn", target: "Analysis & Modelling" },
-    { source: "Review to Learn", target: "Data Products" },
-    { source: "Review to Learn", target: "Application in Society" },
-    { source: "Review to Learn", target: "Communication & Outreach" },
+    { source: "Explore and Review to Learn", target: "Planning" },
+    { source: "Explore and Review to Learn", target: "Data Collection" },
+    { source: "Explore and Review to Learn", target: "Data Management" },
+    { source: "Explore and Review to Learn", target: "Analysis & Modelling" },
+    { source: "Explore and Review to Learn", target: "Data Products" },
+    { source: "Explore and Review to Learn", target: "Application in Society" },
+    { source: "Explore and Review to Learn", target: "Communication & Outreach" },
     { source: "Planning", target: "Data Collection" },
     { source: "Planning", target: "Data Management" },
     { source: "Planning", target: "Analysis & Modelling" },
@@ -52,13 +52,13 @@ const data = {
 
 // Dummy questions with tags
 const questions = [
-  { text: "Have you thought about a data management plan?", tags: ["Planning", "Data Management"] },
+  { text: "Have you thought about a data management plan?", tags: ["Planning", "Data Management"] }, 
   { text: "Do you have a strategy for outreach?", tags: ["Communication & Outreach"] },
   { text: "Have you evaluated your data collection methods?", tags: ["Evaluation", "Data Collection"] },
   { text: "Have you considered the societal impact of your work?", tags: ["Application in Society"] },
   { text: "Do you know if your data will be usable for analysis and modeling?", tags: ["Data Collection", "Analysis & Modelling"] },
   { text: "Have you considered the data products you will create?", tags: ["Data Products"] },
-  { text: "What work has already been done in this field? Who is actively doing work in this (geographic) area?", tags: ["Review to Learn", "Planning"] },
+  { text: "What work has already been done in this field? Who is actively doing work in this (geographic) area?", tags: ["Explore and Review to Learn", "Planning"] },
   { text: "What data do you need to collect to answer your research question?", tags: ["Planning", "Data Collection"] },
   { text: "What data do you have access to?", tags: ["Data Collection"] },
   { text: "Did your data collection methods work as expected?", tags: ["Data Collection", "Evaluation"] },
@@ -356,6 +356,15 @@ const node = svgGroup.selectAll(".node")
   .attr("cx", d => d.x)
   .attr("cy", d => d.y)
   .attr("fill", "#1f78b4")
+  .on("mouseover", (event, d) => {
+    tooltip.style("left", `${event.pageX + 10}px`)
+      .style("top", `${event.pageY + 10}px`)
+      .style("display", "inline-block")
+      .html(`<strong>${d.id}</strong><br>${d.description}`);
+  })
+  .on("mouseout", () => {
+    tooltip.style("display", "none");
+  })
   .on("click", (event, d) => {
     const node = d3.select(event.currentTarget);
     const isSelected = node.classed("selected");
@@ -453,7 +462,16 @@ svgGroup.selectAll(".node-label")
     const angle = Math.atan2(d.y - centerY, d.x - centerX);
     return Math.sin(angle) > 0 ? "hanging" : "alphabetic";  // Correct vertical alignment
   })
-  .text(d => d.name || d.id);
+  .text(d => d.name || d.id)
+  .on("mouseover", (event, d) => {
+    tooltip.style("left", `${event.pageX + 10}px`)
+      .style("top", `${event.pageY + 10}px`)
+      .style("display", "inline-block")
+      .html(`<strong>${d.id}</strong><br>${d.description}`);
+  })
+  .on("mouseout", () => {
+    tooltip.style("display", "none");
+  });
 
   // Update info panel with questions related to selected nodes and links
 function updateInfoPanel() {
@@ -465,12 +483,19 @@ function updateInfoPanel() {
 
   const allSelectedIds = [...new Set([...selectedNodeIds, ...selectedLinkNodeIds])];
 
+  const selectedDescriptions = selectedNodes
+    .map(node => `<strong>${node.id}:</strong> ${node.description}`)
+    .join("<br><br>");
+
   const associatedQuestions = questions.filter(q => allSelectedIds.some(id => q.tags.includes(id)))
     .map(q => `<p>${q.text}</p>`).join("");
 
     const selectedComponents = allSelectedIds.join(", ");
     if (allSelectedIds.length > 0 || associatedQuestions) {
-      showInfoPanel(`<h2>Blueprint Component(s):</h2><h3>${selectedComponents}</h3><h2>Questions:</h2>${associatedQuestions}`);
+      showInfoPanel(`
+        <h2>Blueprint Component(s):</h2><h3>${selectedComponents}</h3>
+        <h2>Description:</h2><p>${selectedDescriptions}</p>
+        <h2>Questions:</h2>${associatedQuestions}`);
     } else {
     hideInfoPanel();
   }

@@ -21,6 +21,10 @@ p {
   margin: 0 20px;
   font-size: 20px;
 }
+li{
+  margin: 0 20px;
+  font-size: 20px;
+}
 /* SVG container styles */
 #spiderweb-container {
   display: flex;
@@ -86,7 +90,10 @@ svg {
   padding: 5px;
   border-radius: 3px;
   font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   pointer-events: none;
+  display: none;
+  z-index: 1000;
 }
 
 /* Node styles */
@@ -257,4 +264,10 @@ nav ul li a {
 nav ul li a:hover {
   background-color: #0056b3;
   color: #eaf6ff; 
+}
+em{
+  font-style: italic;
+  font-size: larger;
+  color: #b80000 !important; 
+  font-weight: bold;
 }
