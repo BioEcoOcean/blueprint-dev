@@ -6,7 +6,8 @@
   <title>Interactive Blueprint</title>
   <link rel="stylesheet" href="styles.css">
   <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-  <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="resource-list.js"></script>
   <img src="images/bioecoocean_logo.png" alt="BioEcoOcean Logo" height="100px">
   <img src="images/iode-unesco.png" alt="BioEcoOcean Logo" height="100px">
   <img src="images/OBIS_logo.png" alt="BioEcoOcean Logo" height="100px"> 
@@ -23,18 +24,25 @@
     </nav>
   </header>
 <h1> Resources</h1>
-<p>Here you will find a list of resources that are relevant to each of the components of Blueprint.</p>
+<p>Here you will find a list of resources that are relevant to each of the components of Blueprint. Check each box to display resources associated with a specific Blueprint component.</p>
 <br><br>
 <p><em>Under development: more content to come!</em></p><br>
-<p>Resources include:</p>
-<ul>
-    <li><a href="https://goosocean.org/document-list/168"> GOOS EOV Specification sheets</a></li>
-    <li>Data Resources:
-      <ul><li><a href="https://manual.obis.org/"> OBIS (Ocean Biodiversity Information System) Manual</a></li>
-        <li><a href="https://book.odis.org/index.html"> ODIS (Ocean Data & Information System) Manual</a></li>
-    </ul>
-    </li>
-</ul> 
+<p>Resources:</p>
+<div id="filter-controls" class="tag-filter">
+  
+  <!-- Checkboxes will be dynamically generated here -->
+</div>
+<div>
+    <label class="switch-small">
+      <input type="checkbox" id="exclusive-filter-toggle">
+      <span class="slider-small"></span>
+    </label><span id="toggle-label-small">Show only resources with selected tags exclusively</span>
+    <button id="select-all-btn">Select All</button>
+    <button id="deselect-all-btn">Deselect All</button>    
+  </div>
+<div id="resources-list">
+  <!-- Resource list will be dynamically generated here -->
+</div>
 
 <footer>
   <hr>
