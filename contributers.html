@@ -6,7 +6,7 @@
   <title>Interactive Blueprint</title>
   <link rel="stylesheet" href="styles.css">
   <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-  <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <img src="images/bioecoocean_logo.png" alt="BioEcoOcean Logo" height="100px">
   <img src="images/iode-unesco.png" alt="BioEcoOcean Logo" height="100px">
   <img src="images/OBIS_logo.png" alt="BioEcoOcean Logo" height="100px"> 
@@ -22,19 +22,13 @@
       </ul>
     </nav>
   </header>
-<h1> Resources</h1>
-<p>Here you will find a list of resources that are relevant to each of the components of Blueprint.</p>
+<h1> Contributors</h1>
+<p>Here you will find a list of individuals and groups that have contributed to the development of the Blueprint. 
+    Note we are still setting up a system to ensure all Contributors are properly acknowledged, so if you do not see your name here, let us know!</p>
+</p>
 <br><br>
-<p><em>Under development: more content to come!</em></p><br>
-<p>Resources include:</p>
-<ul>
-    <li><a href="https://goosocean.org/document-list/168"> GOOS EOV Specification sheets</a></li>
-    <li>Data Resources:
-      <ul><li><a href="https://manual.obis.org/"> OBIS (Ocean Biodiversity Information System) Manual</a></li>
-        <li><a href="https://book.odis.org/index.html"> ODIS (Ocean Data & Information System) Manual</a></li>
-    </ul>
-    </li>
-</ul> 
+<p><em>Under development: more to come!</em></p><br>
+<div id="contributors-list"></div>
 
 <footer>
   <hr>
@@ -42,6 +36,23 @@
       those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Executive Agency (REA). Neither the 
       European Union nor the granting authority can be held responsible for them.</p>
 </footer>
-
+<script>
+  d3.csv("contribs/contributors.csv").then(function(data) {
+    // Filter out empty rows (in case the CSV is empty)
+    const filtered = data.filter(d => d["First Name"] && d.Organization);
+    if (filtered.length === 0) {
+      document.getElementById("contributors-list").innerHTML = "<em>No contributors listed yet.</em>";
+      return;
+    }
+    let html = "<ul>";
+    filtered.forEach(d => {
+      html += `<li>${d["First Name"]} ${d["Last Name"]} (${d.Organization})</li>`;
+    });
+    html += "</ul>";
+    document.getElementById("contributors-list").innerHTML = html;
+  }).catch(function(error) {
+    document.getElementById("contributors-list").innerHTML = "<em>Could not load contributors list.</em>";
+  });
+</script>
 </body>
 </html>

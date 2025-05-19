@@ -21,28 +21,37 @@ p {
   margin: 0 20px;
   font-size: 20px;
 }
+li{
+  margin: 0 20px;
+  font-size: 20px;
+}
 /* SVG container styles */
 #spiderweb-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  height: 600px;
-  position: relative;
+  height: 60vh;
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 100vh;
+  box-sizing: border-box;
 }
-/* SVG container styles */
 svg {
   display: block;
   margin: 0 auto;
   background-color: #eaf6ff; /* Optional: subtle background for the SVG */
   border: 1px solid #002366;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 #spiderweb {
   flex: 2;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 80%;
   height: 100%;
+  margin: 0;
 }
 
 #info-panel {
@@ -52,12 +61,12 @@ svg {
   border: 3px solid #002366; 
   display: none; /* Initially hidden */
   overflow-y: auto;
-  height: 100%;
-  width: 50%;
+  height: 60%;
+  max-height: 90vh;
+  width: 40vw;
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 0;  
 }
 #close-info-panel {
   display: block;
@@ -81,7 +90,11 @@ svg {
   padding: 5px;
   border-radius: 3px;
   font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   pointer-events: none;
+  display: none;
+  z-index: 1000;
+  max-width: 210px;
 }
 
 /* Node styles */
@@ -96,24 +109,34 @@ svg {
   stroke: #a16305;
   stroke-width: 1.75px;
 }
+.node:hover {
+  fill: #ff9900; /* Change to a different color when selected */
+  stroke: #a16305;
+  stroke-width: 1.75px;
+}
 /* Text labels for nodes */
 .node-label {
-  font-size: 17px; /* Adjust the font size */
+  font-size: 20px; /* Adjust the font size */
   fill: #002366; /* Dark blue for text */
   font-family: 'Montserrat', sans-serif; /* Same font as the rest of the page */
   pointer-events: none; /* Prevent text from capturing mouse events */
   font-weight: bold;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: center;
+  width: 100px;
 }
 
 /* Link styles */
 .link {
   stroke: #cccccc;
-  stroke-width: 3px;
+  stroke-width: 4px;
   transition: stroke 0.2s, stroke-width 0.2s; 
 }
 .link:hover {
   stroke: #002366;  /* Dark blue on hover */
-  stroke-width: 3px;  /* Increase thickness on hover */
+  stroke-width: 5px;  /* Increase thickness on hover */
+  cursor: pointer;
 }
 
 .link.selected {
@@ -242,4 +265,10 @@ nav ul li a {
 nav ul li a:hover {
   background-color: #0056b3;
   color: #eaf6ff; 
+}
+em{
+  font-style: italic;
+  font-size: larger;
+  color: #b80000 !important; 
+  font-weight: bold;
 }
