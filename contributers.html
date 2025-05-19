@@ -6,7 +6,7 @@
   <title>Interactive Blueprint</title>
   <link rel="stylesheet" href="styles.css">
   <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-  <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <img src="images/bioecoocean_logo.png" alt="BioEcoOcean Logo" height="100px">
   <img src="images/iode-unesco.png" alt="BioEcoOcean Logo" height="100px">
   <img src="images/OBIS_logo.png" alt="BioEcoOcean Logo" height="100px"> 
@@ -28,7 +28,7 @@
 </p>
 <br><br>
 <p><em>Under development: more to come!</em></p><br>
-
+<div id="contributors-list"></div>
 
 <footer>
   <hr>
@@ -36,6 +36,23 @@
       those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Executive Agency (REA). Neither the 
       European Union nor the granting authority can be held responsible for them.</p>
 </footer>
-
+<script>
+  d3.csv("contribs/contributors.csv").then(function(data) {
+    // Filter out empty rows (in case the CSV is empty)
+    const filtered = data.filter(d => d["First Name"] && d.Organization);
+    if (filtered.length === 0) {
+      document.getElementById("contributors-list").innerHTML = "<em>No contributors listed yet.</em>";
+      return;
+    }
+    let html = "<ul>";
+    filtered.forEach(d => {
+      html += `<li>${d["First Name"]} ${d["Last Name"]} (${d.Organization})</li>`;
+    });
+    html += "</ul>";
+    document.getElementById("contributors-list").innerHTML = html;
+  }).catch(function(error) {
+    document.getElementById("contributors-list").innerHTML = "<em>Could not load contributors list.</em>";
+  });
+</script>
 </body>
 </html>
