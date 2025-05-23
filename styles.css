@@ -110,8 +110,8 @@ svg {
   stroke-width: 1.75px;
 }
 .node:hover {
-  fill: #ff9900; /* Change to a different color when selected */
-  stroke: #a16305;
+  fill: #ffb700; /* Change to a different color when selected */
+  stroke: #bd9406;
   stroke-width: 1.75px;
 }
 /* Text labels for nodes */
@@ -143,7 +143,10 @@ svg {
   stroke: #ff9900;
   stroke-width: 6px;
 }
-
+.link.selected:hover {
+  stroke: #fccd86fb;
+  stroke-width: 6px;
+}
 /* Default link label style */
 .link-label {
   font-family: 'Montserrat', sans-serif;
