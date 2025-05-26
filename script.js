@@ -75,7 +75,6 @@ const questions = [
   { text: "What new technology (equipment) can be used in your study?", tags: ["Planning"] },
   { text: "What Essential Ocean Variables will you be collecting?", tags: ["Planning"] },
   { text: "How can we strengthen the connection with other ocean observation components?", tags: ["Planning"] },
-  
   { text: "Have you communicated with the relevant stakeholders' (needs and expectations)?", tags: ["Planning"] },
 
   // Data Collection
@@ -149,8 +148,8 @@ const questions = [
   { text: "What key metrics should I be tracking to assess my effectiveness in evaluation?", tags: ["Evaluation"] },
   { text: "Is your Data Management Plan working?", tags: ["Evaluation"] },
   { text: "Does my review result in a diverse perspective, or reinforcing existing assumptions?", tags: ["Evaluation"] },
-  
-  { text: "Have you thought about a data management plan?", tags: ["Planning", "Data Management"] }, 
+
+  { text: "Have you thought about a data management plan?", tags: ["Planning", "Data Management"] },
   { text: "Do you have a strategy for outreach?", tags: ["Communication & Outreach"] },
   { text: "Have you evaluated your data collection methods?", tags: ["Evaluation", "Data Collection"] },
   { text: "Have you considered the societal impact of your work?", tags: ["Application in Society"] },
@@ -162,420 +161,286 @@ const questions = [
   { text: "Did your data collection methods work as expected?", tags: ["Data Collection", "Evaluation"] },
 ];
 
-/////////////// Set up the space for the spiderweb //////////////////////
-// const svgWidth = 800; // Set the width of the SVG box
-// const svgHeight = 600; // Set the height of the SVG box
-// const radius = 200; // Circle radius
-// const centerX = svgWidth / 2;
-// const centerY = svgHeight / 2;
-const container = document.getElementById('spiderweb');
-const svg = d3.select('#spiderweb').append('svg');
-
-// Function to update SVG dimensions
-function updateSvgDimensions() {
-  const svgWidth = container.offsetWidth;
-  const svgHeight = container.offsetHeight || (svgWidth * 0.8); // Fallback height
-  console.log(`Container width: ${svgWidth}, height: ${svgHeight}`); 
-
-  svg.attr('width', svgWidth).attr('height', svgHeight);
-}
-
-// Initialize the dimensions
-updateSvgDimensions();
-
-// Use ResizeObserver to listen for container size changes
-const resizeObserver = new ResizeObserver(() => {
-  updateSvgDimensions();
-});
-
-// Observe the container
-resizeObserver.observe(container);
-
-let svgWidth = container.offsetWidth;
-let svgHeight = container.offsetHeight || (svgWidth * 0.8);
-// let svgWidth = window.innerWidth * 0.5; // % of viewport width
-// let svgHeight = window.innerHeight * 0.5; // % of viewport height
-let radius = Math.min(svgWidth, svgHeight) * 0.35; // Adjust radius based on dimensions
-let centerX = svgWidth / 2;
-let centerY = svgHeight / 2;
-
-
-// Assign positions for nodes
-function updateNodePositions() {
-  centerX = svgWidth / 2;
-  centerY = svgHeight / 2;
-  radius = Math.min(svgWidth, svgHeight) * 0.35;
-
-  data.nodes.forEach((node, i) => {
-    const angle = (i / data.nodes.length) * 2 * Math.PI - Math.PI / 2;
-    node.x = centerX + radius * Math.cos(angle);
-    node.y = centerY + radius * Math.sin(angle);
-  });
-
-  // Update node and link positions
-  node
-    .attr("cx", d => d.x)
-    .attr("cy", d => d.y);
-
-  link
-    .attr("x1", d => data.nodes.find(node => node.id === d.source).x)
-    .attr("y1", d => data.nodes.find(node => node.id === d.source).y)
-    .attr("x2", d => data.nodes.find(node => node.id === d.target).x)
-    .attr("y2", d => data.nodes.find(node => node.id === d.target).y);
-
-  svgGroup.selectAll(".node-label")
-    .attr("x", d => d.x + (22 * Math.cos(Math.atan2(d.y - centerY, d.x - centerX))))
-    .attr("y", d => d.y + (22 * Math.sin(Math.atan2(d.y - centerY, d.x - centerX))))
-    .attr("text-anchor", d => {
-      const angle = Math.atan2(d.y - centerY, d.x - centerX);
-      return Math.cos(angle) > 0 ? "start" : "end";  // Correct side for horizontal alignment
-    })
-    .attr("alignment-baseline", d => {
-      const angle = Math.atan2(d.y - centerY, d.x - centerX);
-      return Math.sin(angle) > 0 ? "hanging" : "alphabetic";  // Correct vertical alignment
-    })
-    .text(d => d.name|| d.id);;
-}
-
-// data.nodes.forEach((node, i) => {
-//   const angle = (i / data.nodes.length) * 2 * Math.PI - Math.PI / 2; // Start at top
-//   node.x = centerX + radius * Math.cos(angle);
-//   node.y = centerY + radius * Math.sin(angle);
-// });
-
-// Create the SVG canvas
-// const svg = d3.select("#spiderweb").append("svg")
-//   .attr("width", svgWidth)
-//   .attr("height", svgHeight)
-//   .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
-//   .attr("preserveAspectRatio", "xMidYMid meet");
-
-// Tooltip
 const tooltip = d3.select("#tooltip");
-
-// Selection mode toggle
 let multiSelectMode = false;
-document.getElementById("toggle-selection-mode").addEventListener("change", (event) => {
-  multiSelectMode = event.target.checked;
-  document.getElementById("toggle-label").textContent = multiSelectMode ? "Multi-Select" : "Single Select";
-});
 
-
-/////////////// Set up functions for zoom etc //////////////////////
-// Add zoom and pan behavior
-const zoom = d3.zoom()
-  .scaleExtent([0.5, 5]) // Define the zoom scale range
-  .on("zoom", (event) => {
-    svgGroup.attr("transform", event.transform); // Apply zoom and pan
-  });
-
-svg.call(zoom);
-
-// Function to reset zoom to default position
-function updateZoomForSelectedItems() {
-  // Get selected nodes and links
-  const selectedNodes = d3.selectAll(".node.selected").data();
-  const selectedLinks = d3.selectAll(".link.selected").data();
-
-  if (selectedNodes.length === 0 && selectedLinks.length === 0) return;
-
-  // Calculate the bounding box of all selected nodes and links
-  const allSelectedElements = [...selectedNodes, ...selectedLinks.flatMap(link => [link.source, link.target])];
-  const xValues = allSelectedElements.map(e => e.x);
-  const yValues = allSelectedElements.map(e => e.y);
-
-  // Compute the center of the selected elements
-  const centerX = d3.mean(xValues);
-  const centerY = d3.mean(yValues);
-
-  // Compute the scale based on the bounding box of the selected elements
-  const xExtent = d3.extent(xValues);
-  const yExtent = d3.extent(yValues);
-  const width = xExtent[1] - xExtent[0];
-  const height = yExtent[1] - yExtent[0];
-  const padding = 50;
-
-  const scale = Math.min(
-    (svgWidth - 2 * padding) / width,
-    (svgHeight - 2 * padding) / height
-  );
-
-  // Apply the zoom transformation to the center of the selected elements
-  const transform = d3.zoomIdentity
-    .translate(svgWidth / 2, svgHeight / 2)
-    .scale(scale)
-    .translate(-centerX, -centerY);
-
-  svg.transition()
-    .duration(750)
-    .call(zoom.transform, transform);
-}
-
-
-function resetZoom() {
-  const transform = d3.zoomIdentity
-    .translate(svgWidth / 2, svgHeight / 2)  // Center the zoom to the center of the SVG
-    .scale(1)  // Set the zoom scale to 1 (default zoom level)
-    .translate(-centerX, -centerY);  // Adjust for the center of the graph (optional)
-
-  svg.transition()
-    .duration(750)
-    .call(zoom.transform, transform);  // Apply the zoom transform with the reset state
-}
-
-let svgMoved = false; // Flag to ensure the SVG moves only once
-// Function to handle the SVG transformation
-function adjustSvg() {
-  const svgContainer = d3.select("#spiderweb").node(); // Get the SVG container
-  const svgBoundingRect = svgContainer.getBoundingClientRect(); // Get dimensions and position
-
-  // Set the info panel width as 50% of the screen width
-  const infoPanelWidth = window.innerWidth * 0.5;
-
-  // Calculate translation to shift the SVG left of the info panel
-  //const translateX = -(infoPanelWidth / 2.5); // Shift left by half the info panel width
-  //const translateY = 0; // No vertical translation
-
-  // Define a dynamic scale factor
-  //const scale = 0.70; // Shrinks to % of its size
-
-  // Ensure it doesn't move off-screen
-  const maxTranslateX = -(svgBoundingRect.width * (1 - scale)) / 2;
-  const finalTranslateX = Math.max(translateX, maxTranslateX); // Ensure it stays within bounds
-
-  // Apply the transformation
-  d3.select("svg")
-    .transition()
-    .duration(300) // Smooth transition for resizing
-    .attr("transform", `translate(${finalTranslateX}, ${translateY}) scale(${scale})`);
-}
-
-////////////////////////// Set up the nodes and links of the spiderweb //////////////////////
-// Create a group to hold nodes and links
+// Initialize SVG
+const container = document.getElementById("spiderweb");
+const svg = d3.select(container).append("svg");
 const svgGroup = svg.append("g");
 
-// Add links
-const link = svgGroup.selectAll(".link")
-  .data(data.links)
-  .enter()
-  .append("line")
-  .attr("class", "link")
-  .attr("x1", d => {
-    const sourceNode = data.nodes.find(node => node.id === d.source);
-    return sourceNode.x;
-  })
-  .attr("y1", d => {
-    const sourceNode = data.nodes.find(node => node.id === d.source);
-    return sourceNode.y;
-  })
-  .attr("x2", d => {
-    const targetNode = data.nodes.find(node => node.id === d.target);
-    return targetNode.x;
-  })
-  .attr("y2", d => {
-    const targetNode = data.nodes.find(node => node.id === d.target);
-    return targetNode.y;
-  })
-  .on("click", (event, d) => {
-    // Add selected class to the clicked link
-    const sourceNode = data.nodes.find(node => node.id === d.source);
-    const targetNode = data.nodes.find(node => node.id === d.target);
+const dimensions = { width: 0, height: 0, radius: 0, centerX: 0, centerY: 0 };
 
-    const isSelected = d3.select(event.currentTarget).classed("selected");
+function updateDimensions() {
+  dimensions.width = container.offsetWidth;
+  dimensions.height = container.offsetHeight || dimensions.width * 0.8;
+  dimensions.radius = Math.min(dimensions.width, dimensions.height) * 0.35;
+  dimensions.centerX = dimensions.width / 2;
+  dimensions.centerY = dimensions.height / 2;
 
-    if (multiSelectMode) {
-      // Toggle the selected class on the clicked link
-      const link = d3.select(event.currentTarget);
-      const isLinkSelected = link.classed("selected");
-      link.classed("selected", !isLinkSelected);
+  svg.attr("width", dimensions.width).attr("height", dimensions.height);
+}
 
-      // Re-evaluate node selection based on remaining selected links
-      d3.selectAll(".node").classed("selected", node => {
-        // Check if the node is part of any currently selected links
-        const isConnectedToSelectedLink = d3
-          .selectAll(".link.selected")
-          .data()
-          .some(link => link.source === node.id || link.target === node.id);
-
-        return isConnectedToSelectedLink;
-        updateZoomForSelectedItems();
-      });
-    } else {
-      if (isSelected) {
-        // If the link is already selected, deselect it and reset zoom
-        d3.select(event.currentTarget).classed("selected", false);
-        resetZoom();
-      } else {
-        // Zoom into the link if it's not selected
-        const transform = d3.zoomIdentity
-          .translate(svgWidth / 2, svgHeight / 2)
-          .scale(2)
-          .translate(-d.x, -d.y);
-    
-        svg.transition()
-          .duration(750)
-          .call(zoom.transform, transform);
-      // Single-select mode: clear all and highlight the current link and nodes
-      d3.selectAll(".node").classed("selected", false);
-      d3.selectAll(".link").classed("selected", false);
-
-      d3.selectAll(".node").classed("selected", node => {
-        return node.id === sourceNode.id || node.id === targetNode.id;
-      });
-      d3.select(event.currentTarget).classed("selected", true);
-    }
-  }
-
-    // Update the info panel with the current selection
-    updateInfoPanel();
-
-    if (!svgMoved) {
-      adjustSvg(); // Perform initial adjustment
-      svgMoved = true; // Set the flag so this block doesn't execute again
-    }
-  })
-    .on("mouseover", (event, d) => {
-      tooltip.style("left", `${event.pageX + 20}px`)
-        .style("top", `${event.pageY + 20}px`)
-        .style("display", "inline-block")
-        .html(`Connection: <br>${d.source} ↔ ${d.target}`) ;
-    })
-    .on("mouseout", () => {
-      tooltip.style("display", "none");
-    });
-
-// Add nodes
-const node = svgGroup.selectAll(".node")
-  .data(data.nodes)
-  .enter()
-  .append("circle")
-  .attr("class", "node")
-  .attr("r", 15)
-  .attr("cx", d => d.x)
-  .attr("cy", d => d.y)
-  .attr("fill", "#1f78b4")
-  .on("mouseover", (event, d) => {
-    tooltip.style("left", `${event.pageX + 10}px`)
-      .style("top", `${event.pageY + 10}px`)
-      .style("display", "inline-block")
-      .html(`<strong>${d.id}</strong><br>${d.description}`);
-  })
-  .on("mouseout", () => {
-    tooltip.style("display", "none");
-  })
-  .on("click", (event, d) => {
-    const node = d3.select(event.currentTarget);
-    const isSelected = node.classed("selected");
-
-    if (multiSelectMode) {
-      // Toggle selected class on the clicked node
-      node.classed("selected", !isSelected);
-      updateZoomForSelectedItems();
-    } else {
-      if (isSelected) {
-        // If the node is already selected, deselect it and reset zoom
-        node.classed("selected", false);
-        resetZoom();
-      } else {
-        // Zoom into the node if it's not selected
-        const transform = d3.zoomIdentity
-          .translate(svgWidth / 2, svgHeight / 2)
-          .scale(2)
-          .translate(-d.x, -d.y);
-    
-        svg.transition()
-          .duration(750)
-          .call(zoom.transform, transform);
-        // Deselect all nodes and links, then select the clicked node
-        d3.selectAll(".node").classed("selected", false);
-        d3.selectAll(".link").classed("selected", false);
-        node.classed("selected", true);
-    }
-  }
-
-    // Show info panel with questions related to the selected nodes and links
-    updateInfoPanel();
-    if (!svgMoved) {
-      adjustSvg(); // Perform initial adjustment
-      svgMoved = true; // Set the flag so this block doesn't execute again
-    }
-  });
-
-
-// Reset zoom and deselect all nodes and links
-document.getElementById("deselect-all").addEventListener("click", () => {
-  d3.selectAll(".node").classed("selected", false);
-  d3.selectAll(".link").classed("selected", false);
-  hideInfoPanel();
-  resetZoom();
-  svgMoved = false;
+const zoom = d3.zoom()
+.scaleExtent([0.5, 5])
+.on("zoom", (event) => {
+  svgGroup.attr("transform", event.transform);
 });
+svg.call(zoom);
 
- // Handle showing the info panel
-function showInfoPanel(content) {
-  d3.select("#info-panel")
-    .style("display", "block");
-  // Add content to the info panel
-  d3.select("#info-content").html(content);
-  // Add the close button behavior
-  //document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
+function findNodeById(id) {
+  return data.nodes.find((node) => node.id === id);
 }
 
-// Handle hiding the info panel
-function hideInfoPanel() {
-  // Hide the info panel
-  d3.select("#info-panel")
-    .style("display", "none");
-
-  resetZoom();
-
-  // Reset the spiderweb scale
-  // svg.transition().duration(300)
-  //   .attr("transform", "scale(1) translate(0, 0)");
-
-    // Remove selected class from all nodes and links
-  d3.selectAll(".node").classed("selected", false);
-  d3.selectAll(".link").classed("selected", false);
-
-    // Reset svgMoved flag
-    svgMoved = false;
+function initializeNodes() {
+  svgGroup
+    .selectAll(".node")
+    .data(data.nodes)
+    .enter()
+    .append("circle")
+    .attr("class", "node")
+    .attr("r", 15)
+    .on("mouseover", showTooltip)
+    .on("mouseout", hideTooltip)
+    .on("click", toggleNodeSelection);
 }
 
-// Add event listener to close button
-document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
+function initializeLinks() {
+  svgGroup
+    .selectAll(".link")
+    .data(data.links)
+    .enter()
+    .append("line")
+    .attr("class", "link")
+    .on("mouseover", showTooltip)
+    .on("mouseout", hideTooltip)
+    .on("click", toggleLinkSelection);
+}
 
-// Add labels
-svgGroup.selectAll(".node-label")
-  .data(data.nodes)
-  .enter()
-  .append("text")
-  .attr("class", "node-label")
-  .attr("x", d => d.x + (22 * Math.cos(Math.atan2(d.y - centerY, d.x - centerX))))  // Offset text outward
-  .attr("y", d => d.y + (22 * Math.sin(Math.atan2(d.y - centerY, d.x - centerX))))  // Offset text outward
-  .attr("text-anchor", d => {
-    const angle = Math.atan2(d.y - centerY, d.x - centerX);
-    return Math.cos(angle) > 0 ? "start" : "end";  // Correct side for horizontal alignment
-  })
-  .attr("alignment-baseline", d => {
-    const angle = Math.atan2(d.y - centerY, d.x - centerX);
-    return Math.sin(angle) > 0 ? "hanging" : "alphabetic";  // Correct vertical alignment
-  })
-  .text(d => d.name || d.id)
-  .on("mouseover", (event, d) => {
-    tooltip.style("left", `${event.pageX + 10}px`)
-      .style("top", `${event.pageY + 10}px`)
-      .style("display", "inline-block")
-      .html(`<strong>${d.id}</strong><br>${d.description}`);
-  })
-  .on("mouseout", () => {
-    tooltip.style("display", "none");
+function initializeLabels() {
+  svgGroup
+    .selectAll(".node-label")
+    .data(data.nodes)
+    .enter()
+    .append("text")
+    .attr("class", "node-label")
+    .text((d) => d.name || d.id)
+    .on("mouseover", showTooltip)
+    .on("mouseout", hideTooltip);
+}
+
+function positionElements() {
+  data.nodes.forEach((node, i) => {
+    const angle = (i / data.nodes.length) * 2 * Math.PI - Math.PI / 2;
+    node.x = dimensions.centerX + dimensions.radius * Math.cos(angle);
+    node.y = dimensions.centerY + dimensions.radius * Math.sin(angle);
   });
 
-  // Update info panel with questions related to selected nodes and links
+  svgGroup.selectAll(".node").attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+  svgGroup
+    .selectAll(".link")
+    .attr("x1", (d) => findNodeById(d.source).x)
+    .attr("y1", (d) => findNodeById(d.source).y)
+    .attr("x2", (d) => findNodeById(d.target).x)
+    .attr("y2", (d) => findNodeById(d.target).y);
+  svgGroup
+    .selectAll(".node-label")
+    .attr("x", (d) => d.x + 22 * Math.cos(Math.atan2(d.y - dimensions.centerY, d.x - dimensions.centerX)))
+    .attr("y", (d) => d.y + 22 * Math.sin(Math.atan2(d.y - dimensions.centerY, d.x - dimensions.centerX)))
+    .attr("text-anchor", (d) => {
+      const angle = Math.atan2(d.y - dimensions.centerY, d.x - dimensions.centerX);
+      return Math.cos(angle) > 0 ? "start" : "end";
+    })
+    .attr("alignment-baseline", (d) => {
+      const angle = Math.atan2(d.y - dimensions.centerY, d.x - dimensions.centerX);
+      return Math.sin(angle) > 0 ? "hanging" : "alphabetic";
+    });  
+    
+}
+
+function toggleNodeSelection(event, node) {
+  const nodeElement = d3.select(this);
+  const isSelected = nodeElement.classed("selected");
+  const nodeId = node.id;
+
+  if (multiSelectMode) {
+    if (isSelected) {
+      // Deselect the node itself
+      nodeElement.classed("selected", false);
+
+      // Deselect all links connected to this node
+      d3.selectAll(".link").each(function(link) {
+        if (link.source === nodeId || link.target === nodeId) {
+          d3.select(this).classed("selected", false);
+        }
+      });
+      hideInfoPanel();resetZoom();
+      // Do NOT try to deselect other nodes here!
+    } else {
+      // Select the node itself
+      nodeElement.classed("selected", true);
+    }
+  } else {
+    if (isSelected) {
+      // Deselect if the node is already selected
+      d3.selectAll(".link, .node").classed("selected", false);
+      hideInfoPanel();resetZoom();
+    } else {
+      // Clear all selections and select the clicked node
+      d3.selectAll(".link, .node").classed("selected", false);
+      nodeElement.classed("selected", true);
+    }
+  }
+
+  
+  if (!isSelected) zoomToTarget([node]);
+  updateInfoPanel();
+}
+
+function toggleLinkSelection(event, link) {
+  const linkElement = d3.select(this);
+  const isSelected = linkElement.classed("selected");
+
+  const sourceNodeId = link.source;
+  const targetNodeId = link.target;
+  const sourceNode = findNodeById(sourceNodeId);
+  const targetNode = findNodeById(targetNodeId);  
+
+  if (multiSelectMode) {
+    if (isSelected) {
+      // Deselect the link itself
+      linkElement.classed("selected", false);
+
+      // Check if the source and target nodes are connected to any other selected links
+      const selectedLinks = d3.selectAll(".link.selected").data();
+
+      // Determine if sourceNode should remain selected
+      const isSourceConnected = selectedLinks.some(
+        (otherLink) =>
+          otherLink.source === sourceNodeId || otherLink.target === sourceNodeId
+      );
+
+      // Determine if targetNode should remain selected
+      const isTargetConnected = selectedLinks.some(
+        (otherLink) =>
+          otherLink.source === targetNodeId || otherLink.target === targetNodeId
+      );
+
+      // Deselect sourceNode if not connected to other selected links
+      if (!isSourceConnected) {
+        d3.selectAll(".node").each(function (node) {
+          if (node.id === sourceNodeId) {
+            d3.select(this).classed("selected", false);
+          }
+        });
+      }
+
+      // Deselect targetNode if not connected to other selected links
+      if (!isTargetConnected) {
+        d3.selectAll(".node").each(function (node) {
+          if (node.id === targetNodeId) {
+            d3.select(this).classed("selected", false);
+          }
+        });
+      }
+      hideInfoPanel();resetZoom();
+    } else {
+      // Select the link and connected nodes
+      linkElement.classed("selected", true);
+
+      d3.selectAll(".node").each(function (node) {
+        if (node.id === sourceNodeId || node.id === targetNodeId) {
+          d3.select(this).classed("selected", true);
+        }
+      });
+    }
+  } else {
+    // Single-select mode logic
+    if (isSelected) {
+      d3.selectAll(".link, .node").classed("selected", false);
+      hideInfoPanel();resetZoom();
+    } else {
+      d3.selectAll(".link, .node").classed("selected", false);
+      linkElement.classed("selected", true);
+
+      d3.selectAll(".node").each(function (node) {
+        if (node.id === sourceNodeId || node.id === targetNodeId) {
+          d3.select(this).classed("selected", true);
+        }
+      });
+    }
+  }
+
+  
+  if (!isSelected)zoomToTarget([sourceNode, targetNode]);
+  updateInfoPanel();
+}
+
+function zoomToTarget(targetNodes = []) {
+  const svg = d3.select("svg"); // Adjust selector based on your setup
+  const g = svg.select("g"); // Assuming your graph elements are within a <g> element
+
+  if (targetNodes.length === 0) {
+    // Reset zoom to default view
+    const resetTransform = d3.zoomIdentity.translate(0, 0).scale(1);
+    svg.transition()
+      .duration(750)
+      .call(zoom.transform, resetTransform); // Update d3.zoom state
+    return;
+  }
+
+  const bounds = { x1: Infinity, y1: Infinity, x2: -Infinity, y2: -Infinity };
+
+  targetNodes.forEach(node => {
+    bounds.x1 = Math.min(bounds.x1, node.x);
+    bounds.y1 = Math.min(bounds.y1, node.y);
+    bounds.x2 = Math.max(bounds.x2, node.x);
+    bounds.y2 = Math.max(bounds.y2, node.y);
+  });
+
+  const width = bounds.x2 - bounds.x1;
+  const height = bounds.y2 - bounds.y1;
+  const centerX = (bounds.x1 + bounds.x2) / 2;
+  const centerY = (bounds.y1 + bounds.y2) / 2;
+
+  const svgWidth = parseInt(svg.style("width"));
+  const svgHeight = parseInt(svg.style("height"));
+
+  const scale = Math.min(svgWidth / width, svgHeight / height, 2); // Cap scale at 2 for max zoom
+  const translate = [
+    svgWidth / 2 - scale * centerX - 100,
+    svgHeight / 2 - scale * centerY,
+  ];
+
+  const transform = d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale);
+
+  svg.transition()
+    .duration(750)
+    .call(zoom.transform, transform); // Update d3.zoom state
+}
+
+function resetZoom() {
+  const resetTransform = d3.zoomIdentity.translate(0, 0).scale(1);
+  svg.transition()
+    .duration(750)
+    .call(zoom.transform, resetTransform); // Update d3.zoom state
+}
+function showTooltip(event, d) {
+  const content = d.description || `${d.source} ↔ ${d.target}`;
+  tooltip.style("left", `${event.pageX + 10}px`)
+    .style("top", `${event.pageY + 10}px`)
+    .style("display", "inline-block")
+    .html(`<strong>${d.id || "Link"}</strong><br>${content}`);
+}
+function hideTooltip() {
+  tooltip.style("display", "none");
+}
+
 function updateInfoPanel() {
+  console.log("updateInfoPanel called");
   const selectedNodes = d3.selectAll(".node.selected").data();
   const selectedLinks = d3.selectAll(".link.selected").data();
-
+  
   const selectedNodeIds = selectedNodes.map(node => node.id);
   const selectedLinkNodeIds = selectedLinks.flatMap(link => [link.source, link.target]);
 
@@ -598,27 +463,43 @@ function updateInfoPanel() {
     hideInfoPanel();
   }
 }
+function showInfoPanel(content) {
+  console.log("showInfoPanel called with content:", content);
+  d3.select("#info-content").html(content);
+  document.getElementById("info-panel").style.display = "block";
+}
+function hideInfoPanel() {
+  console.log("hideInfoPanel called");
+  document.getElementById("info-panel").style.display = "none";
+  resetZoom();
+}
 
-// Update dimensions on window resize
-window.addEventListener("resize", () => {
-  svgWidth = window.innerWidth * 0.9;
-  svgHeight = window.innerHeight * 0.9;
+function resetSelection() {
+  d3.selectAll(".node, .link").classed("selected", false);
+  updateInfoPanel();
+  zoomToTarget();
+}
 
-  svg.attr("width", svgWidth)
-    .attr("height", svgHeight)
-    .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
-  
-  updateSvgDimensions(); 
-  updateNodePositions();
-
-  if (svgMoved) {
-    adjustSvg(); // Recalculate transformation on resize
-  }
+document.getElementById("toggle-selection-mode").addEventListener("change", (e) => {
+  multiSelectMode = e.target.checked;
+  document.getElementById("toggle-label").textContent = multiSelectMode ? "Multi-Select" : "Single Select";
 });
+document.getElementById("close-info-panel").addEventListener("click", hideInfoPanel);
 
+document.getElementById("deselect-all").addEventListener("click", resetSelection);
 
-// Initial positioning
-updateNodePositions();
+function initialize() {
+  updateDimensions();
+  initializeLinks();
+  initializeNodes(); 
+  initializeLabels(); 
+  positionElements();
 
-console.log(data.nodes);
-console.log(data.links);
+  const resizeObserver = new ResizeObserver(() => {
+    updateDimensions();
+    positionElements();
+  });
+  resizeObserver.observe(container);
+}
+
+initialize();
