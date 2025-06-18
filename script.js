@@ -59,6 +59,8 @@ const questions = [
   { text: "Is your review inclusive of other players in the ocean observation? Who else is involved? Who else is doing similar studies?", tags: ["Explore and Review to Learn"] },
   { text: "What current practices are you using and how can it be improved to ensure a holistic and integrated ocean observation system?", tags: ["Explore and Review to Learn"] },
   { text: "How can we improve the ocean observation system to be more inclusive and enhance cooperation among the stakeholders?", tags: ["Explore and Review to Learn"] },
+  { text: "How can we improve the ocean observation system to be more inclusive including indigenous people and enhance cooperation among the stakeholders?", tags: ["Explore and Review to Learn"] },
+
 
   // Planning
   { text: "Where do I start?", tags: ["Planning"] },
