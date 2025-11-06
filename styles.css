@@ -1,16 +1,21 @@
 /* General styles */
 body {
-  background-color: #c1edff; /* Light blue background */
-  font-family: 'Montserrat', sans-serif; /* Use Montserrat font */
-  color: #164076;
-  margin: 0;
-  padding: 0;
+background-color: #c1edff; /* Light blue background */
+background: linear-gradient(to bottom, #e2f4fc, #72accf);
+font-family: 'Montserrat', sans-serif; /* Use Montserrat font */
+color: #164076;
+margin: 0;
+padding: 0;
 }
 .content{
-    max-width: 90%;
-    margin: 0 auto;
-    padding: 1%;
-    background: #eaf7ff;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 1%;
+  background: #eaf7ff;
+  background-image: url(images/wave_background.png);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat; 
 }
 .footer {
   text-align: center;
@@ -296,6 +301,8 @@ nav {
 nav .navbar {
   font-size: 1.8rem;
   font-weight: bold;
+  margin: 10px;
+  padding: 10px;
 }
 .navbar-menu {
     display: flex;
@@ -330,6 +337,7 @@ nav .navbar {
     display: none;
     flex-direction: column;
     cursor: pointer;
+    margin: 15px;
 }
 
 .hamburger div {
@@ -345,11 +353,12 @@ nav .navbar {
     align-items: center;  /* Vertically aligns logos */
     gap: 10px; /* Spacing between logos */
     padding: 10px; /* Add padding around the container */
+    background: #fcfeff;
 }
 .logo-container img {
     max-width: 20%; /* Scale images within their container */
     height: auto; /* Maintain aspect ratio */
-    max-height: 100px; /* Set a maximum height for larger screens */
+    max-height: 80px; /* Set a maximum height for larger screens */
     flex: 1 1 auto; /* Make logos take up equal space and wrap */
     object-fit: contain; /* Ensure logos scale without distortion */
 }
@@ -373,8 +382,8 @@ em{
   font-weight: bold;
 }
 .tag {
-  background: #e0f0ff;
-  color: #164076;
+  background: #72a1cd;
+  color: #ffffff;
   border-radius: 4px;
   padding: 2px 6px;
   margin-right: 4px;
