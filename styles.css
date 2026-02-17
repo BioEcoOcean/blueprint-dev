@@ -165,6 +165,41 @@ svg {
   stroke: #bd9406;
   stroke-width: 1.75px;
 }
+/* Blank node: rectangle with dotted outline */
+.node.blank {
+  fill: white;
+  stroke: #002366;
+  stroke-dasharray: 5, 5;
+  stroke-width: 2px;
+  rx: 4px;
+  ry: 4px;
+}
+.node.blank:hover {
+  fill: rgba(255, 183, 0, 0.15);
+  stroke: #bd9406;
+  stroke-dasharray: 5, 5;
+}
+.node.blank.selected {
+  fill: rgba(255, 153, 0, 0.2);
+  stroke: #a16305;
+  stroke-dasharray: 5, 5;
+}
+
+.link.blank {
+  stroke: #cccccc;
+  stroke-dasharray: 5, 5;
+  stroke-width: 2px;
+}
+.link.blank:hover {
+  stroke: #002366;
+  stroke-dasharray: 5, 5;
+  stroke-width: 3px;
+}
+.link.blank.selected {
+  stroke: #ff9900;
+  stroke-dasharray: 5, 5;
+  stroke-width: 4px;
+}
 /* Text labels for nodes */
 .node-label {
   font-size: 20px; /* Adjust the font size */
